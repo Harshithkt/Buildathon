@@ -1,0 +1,79 @@
+# Pharmaco - Real-Time Pharmacovigilance Signal Extractor
+
+Pharmaco ingests unstructured social media text in Indian languages (Hindi, Tamil, Hinglish, etc.) and uses Nebius AI Token Factory to extract structured Adverse Drug Reaction (ADR) signals mapped to WHO MedDRA terminology. It automatically generates CDSCO/PvPI-compatible draft reports based on severity and causality assessments.
+
+## Prerequisites
+
+- Node.js 18+
+- npm
+- Firebase project
+- Nebius Token Factory API key
+
+## Setup
+
+1. **Clone/Open the project directory**
+2. **Setup Backend:**
+   ```bash
+   cd backend
+   npm install
+   ```
+3. **Configure Backend Environment:**
+   Create or edit `backend/.env` with your Nebius API Key and Firebase Service Account path.
+4. **Firebase Admin Setup:**
+   Download your Firebase service account JSON from the Firebase Console (Project Settings -> Service Accounts -> Generate new private key).
+   Save it as `backend/firebase/serviceAccount.json`.
+5. **Setup Frontend:**
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+6. **Configure Frontend Environment:**
+   Create or edit `frontend/.env` with your Firebase web configuration values.
+
+## Running the Application
+
+1. **Start Backend (Port 4000):**
+   ```bash
+   cd backend
+   npm run dev
+   ```
+2. **Start Frontend (Port 5173):**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+## Demo Posts to Test
+
+Try pasting these into the single post analyzer:
+
+**Hinglish / Hindi:**
+> "BP ki dawa Amlodipine lene ke 2 ghante baad mujhe bahut chakkar aaya, sar dard ho raha tha aur haath kaanpne lage. Pata nahi kya hua."
+
+**Tamil / English Mix:**
+> "Took Paracetamol for fever yesterday. Kaalailaye severe rash and itching on my arms. Couldn't sleep all night because of nausea."
+
+**Marathi / English:**
+> "Aai la Metformin dilyanantar don tasanni potat khup dukhayla lagla. Tila chakkari aali and breathing la problem hot hota. We took her to hospital."
+
+## Architecture
+
+```text
+[Social Media Text]
+       │
+       ▼
+ [React Frontend] ────────► [Express Backend]
+ (Vite, Tailwind,           (Node.js, CORS)
+  Framer Motion)                   │
+                                   ├──► [Nebius AI Token Factory]
+                                   │    - Extraction: Llama-3.1-8B-Instruct
+                                   │    - Reasoning: Qwen3-32B
+                                   │
+                                   └──► [Firebase Firestore]
+                                        - scan_sessions (History)
+                                        - drug_stats (Aggregations)
+```
+
+## Token Cost
+- ~$0.001 per scan.
+- A $50 credit allows for approximately ~50,000 scans.
