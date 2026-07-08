@@ -9,17 +9,22 @@ const __dirname = path.dirname(__filename);
 // Read service account from FIREBASE_SERVICE_ACCOUNT_PATH
 const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH || './firebase/serviceAccount.json';
 const absolutePath = path.resolve(process.cwd(), serviceAccountPath);
+const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
 
 if (!admin.apps.length) {
   try {
-    if (fs.existsSync(absolutePath)) {
+    if (serviceAccountJson) {
+      const serviceAccount = JSON.parse(serviceAccountJson);
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+      });
+    } else if (fs.existsSync(absolutePath)) {
       const serviceAccount = JSON.parse(fs.readFileSync(absolutePath, 'utf8'));
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
       });
     } else {
-      console.warn(`Service account file not found at ${absolutePath}. Firebase features will fail or run in unauthenticated mode if you don't provide a valid JSON.`);
-      // Initialize without credentials for development/testing if allowed
+      console.warn('Firebase Admin credentials were not provided. Set FIREBASE_SERVICE_ACCOUNT_JSON or FIREBASE_SERVICE_ACCOUNT_PATH to enable Firestore access.');
       admin.initializeApp();
     }
   } catch (error) {

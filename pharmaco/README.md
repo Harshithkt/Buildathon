@@ -18,17 +18,19 @@ Pharmaco ingests unstructured social media text in Indian languages (Hindi, Tami
    npm install
    ```
 3. **Configure Backend Environment:**
-   Create or edit `backend/.env` with your Nebius API Key and Firebase Service Account path.
+   Create or edit `backend/.env` with your Nebius API Key and Firebase service account settings. Use either `FIREBASE_SERVICE_ACCOUNT_PATH` for a local JSON file or `FIREBASE_SERVICE_ACCOUNT_JSON` for an inline secret.
 4. **Firebase Admin Setup:**
    Download your Firebase service account JSON from the Firebase Console (Project Settings -> Service Accounts -> Generate new private key).
-   Save it as `backend/firebase/serviceAccount.json`.
+   Save it locally as `backend/firebase/serviceAccount.json` or point `FIREBASE_SERVICE_ACCOUNT_PATH` to your own secure copy. The file is ignored by git.
 5. **Setup Frontend:**
    ```bash
    cd ../frontend
    npm install
    ```
 6. **Configure Frontend Environment:**
-   Create or edit `frontend/.env` with your Firebase web configuration values.
+   Create or edit `frontend/.env` with your Firebase web configuration values. Those values are loaded from `import.meta.env` and should stay local.
+
+Example env templates are available at `backend/.env.example` and `frontend/.env.example`.
 
 ## Running the Application
 

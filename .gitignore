@@ -1,4 +1,12 @@
 .env
+.env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+.env.test
+.env.test.local
+.env.*.local
 __pycache__/
 *.pyc
 .venv/
@@ -6,3 +14,4 @@ venv/
 node_modules/
 .DS_Store
 .vscode/
+pharmaco/backend/firebase/serviceAccount.json
